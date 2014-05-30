@@ -1,0 +1,188 @@
+// The GenCon function returns a GenCon display. It takes a Javascript object
+// that can have the following properties
+//
+// width:
+//     The width of the display in characters. If not provided, width defaults
+//     to 80
+//
+// height:
+//     The height of the display in characters. If not provided, height defaults
+//     to 24
+//
+// defaultFg:
+//     The default css foreground of the display. If not provided, defaultFg
+//     defaults to 'white'
+//
+// defaultBg:
+//     The default css background of the display. If not provided, defaultBg
+//     defaults to 'black'
+//
+// font:
+//     The css font to be used for the display. If not provided, font defaults
+//     'monospace'
+//
+// - Example -
+//     var display = GenCon({width: 25, height: 20, defaultBg: '#ff0000'});
+
+var GenCon = function (spec) {
+    var that = {},
+        container = document.createElement('span');
+    
+    spec.width = spec.width || 80;
+    spec.height = spec.height || 24;
+    spec.defaultFg = spec.defaultFg || 'white';
+    spec.defaultBg = spec.defaultBg || 'black';
+    spec.font = spec.font || 'monospace';
+
+    (function () {
+        var span;
+        for (var y = 0; y < spec.height; y++) {
+            for (var x = 0; x < spec.width; x++) {
+                span = document.createElement('span');
+                span.id = 'cell-' + x + '-' + y;
+                span.appendChild(document.createTextNode('\u00a0'));
+                span.style.background = spec.defaultBg;
+                span.style.color = spec.defaultFg;
+                container.appendChild(span);
+            }
+            container.appendChild(document.createElement('br'));
+        }
+    })();
+
+    // The addTo method adds the display to a DOM element. It takes the
+    // following parameter
+    //
+    // elementId:
+    //     The id of the element you would like to add the display to.
+    //
+    // - Example -
+    //     <div id="displayplace"></div>
+    //     <script>
+    //         var display = GenCon({});
+    //         display.addTo('displayplace');
+    //     </script>
+
+    that.addTo = function (elementId) {
+        document.getElementById(elementId).style.fontFamily = spec.font;
+        document.getElementById(elementId).appendChild(container);
+        return this;
+    };
+
+
+    
+    // The putChar method draws a character to the display. It takes the
+    // following parameters.
+    //
+    // character:
+    //     The character to draw
+    //
+    // x:
+    //     The horizontal coordinate of the character
+    //
+    // y:
+    //     The vertical coordinate of the character
+    //
+    // (optional) fg:
+    //     The css foreground of the character. If not provided, the display's
+    //     defaultFg is used
+    //
+    // (optional) bg:
+    //     The css background of the character. If not provided, the display's
+    //     defaultBg is used
+    //
+    // - Example -
+    //     var display = GenCon({});
+    //     display.putChar('@', 2, 5);
+    //     display.putChar('D', 3, 5, 'red'); 
+
+    that.putChar = function (character, x, y) {
+        var fg = arguments.length > 3 ? arguments[3] : spec.defaultFg,
+            bg = arguments.length > 4 ? arguments[4] : spec.defaultBg;
+        var span = document.getElementById('cell-' + x + '-' + y);
+        span.childNodes[0].nodeValue = character === ' ' ? '\u00a0' : character;
+        span.style.color = fg;
+        span.style.background = bg;
+        return this;
+    };
+
+    // The putString method draws a sequence of characters to the display. It
+    // takes the following parameters.
+    //
+    // string:
+    //     The sequence of characters to draw
+    //
+    // x:
+    //     The horizontal coordinate to start placing the characters from
+    //
+    // y:
+    //     The vertical coordinate to start placing the characters from
+    //
+    // (optional) fg:
+    //     The css foreground of the character. If not provided, the display's
+    //     defaultFg is used
+    //
+    // (optional) bg:
+    //     The css background of the character. If not provided, the display's
+    //     defaultBg is used
+    //
+    // (optional) maxWidth:
+    //     The width of the theoretical text-box. If this is not provided, the
+    //     string will be drawn all in one row. If this is provided, the string
+    //     will be cut off when it reaches x + maxWidth, and it will resume
+    //     drawing the string on the next row.
+    //
+    // (optional) formatting:
+    //     By default, if the text reaches maxWidth, it will cut off a word, and
+    //     start it again in the next row. If you set formatting to true, it
+    //     will attempt to not cut off words by going to the next row if it
+    //     detects the next word would otherwise get cut off
+
+    that.putString = function (string, x, y) {
+        var fg = arguments.length > 3 ? arguments[3] : spec.defaultFg,
+            bg = arguments.length > 4 ? arguments[4] : spec.defaultBg,
+            maxWidth = arguments.length > 5 ? arguments[5] : 0,
+            formatting = arguments.length > 6 ? arguments[6] : false,
+            xOffset = 0,
+            words = string.split(' ');
+        if (formatting) {
+            for (var i = 0; i < words.length; i++) {
+                if (maxWidth > 0 && xOffset + words[i].length + 1 > maxWidth) {
+                    xOffset = 0;
+                    y++;
+                }
+                if (i > 0 && xOffset !== 0) {
+                    this.putChar(' ', x + xOffset, y, fg, bg);
+                    xOffset++;
+                }
+                for (var j = 0; j < words[i].length; j++) {
+                    this.putChar(words[i].charAt(j), x + xOffset, y, fg, bg);
+                    xOffset++;
+                }
+            }
+        } else {
+            for (var i = 0; i < string.length; i++) {
+                if (maxWidth > 0 && xOffset === maxWidth) {
+                    xOffset = 0;
+                    y++;
+                }
+                this.putChar(string.charAt(i), x + xOffset, y, fg, bg);
+                xOffset++;
+            }
+        }
+        return this;
+    };
+
+    // The getWidth method returns the width of the display in characters
+
+    that.getWidth = function () {
+        return spec.width;
+    };
+
+    // The getHeight method returns the height of the display in characters
+
+    that.getHeight = function () {
+        return spec.height;
+    };
+
+    return that;
+};

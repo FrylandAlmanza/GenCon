@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Test</title>
+        <script src="../gencon.js"></script>
+        <script>
+            window.onload = function () {
+                cons = GenCon({width: 80, height: 24})
+                    .addTo('displayplace');
+                cons.putString('(.Y.)', 0, 0, 'red', 'black')
+                    .putString(' ).( ', 0, 1, 'red', 'black')
+                    .putString('( V )', 0, 2, 'red', 'black')
+                    .putString(' \\|/ ', 0, 3, 'red', 'black')
+                    .putChar('O', 8, 2)
+                    .putChar('W', 10, 3, 'yellow');
+                cons.putString('This text does not have a width cap', 0, 10);
+                cons.putString('But this text does. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 0, 12, 'red', 'black', 20, true);
+                cons.putString('But this text does, and is not formatted using the formatting argument of putString. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 25, 12, 'red', 'black', 20);
+            };
+        </script>
+    </head>
+    <body>
+        <div id="displayplace"></div>
+    </body>
+</html>
