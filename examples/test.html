@@ -11,11 +11,24 @@
                     .putString(' ).( ', 0, 1, 'red', 'black')
                     .putString('( V )', 0, 2, 'red', 'black')
                     .putString(' \\|/ ', 0, 3, 'red', 'black')
+                    .putString('Click on the screen to see a message in your ' +
+                               'browser\'s javascript console!',
+                               25,
+                               0,
+                               'yellow',
+                               'black',
+                               20,
+                               true)
                     .putChar('O', 8, 2)
                     .putChar('W', 10, 3, 'yellow');
                 cons.putString('This text does not have a width cap', 0, 10);
                 cons.putString('But this text does. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 0, 12, 'red', 'black', 20, true);
                 cons.putString('But this text does, and is not formatted using the formatting argument of putString. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 25, 12, 'red', 'black', 20);
+                document.onmousedown = function (e) {
+                    var coord = cons.getDisplayCoord(e.clientX, e.clientY);
+                    console.log('Your mouse is clicked on the cell (' + 
+                                coord.x + ', ' + coord.y + ')');
+                };
             };
         </script>
     </head>

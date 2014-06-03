@@ -68,8 +68,6 @@ var GenCon = function (spec) {
         return this;
     };
 
-
-    
     // The putChar method draws a character to the display. It takes the
     // following parameters.
     //
@@ -136,6 +134,17 @@ var GenCon = function (spec) {
     //     start it again in the next row. If you set formatting to true, it
     //     will attempt to not cut off words by going to the next row if it
     //     detects the next word would otherwise get cut off
+    //
+    // - Example -
+    //     var display = GenCon({});
+    //     display.putString('Heyo!', 2, 5);
+    //     display.putString('This text is longer and formatted',
+    //                       4,
+    //                       5,
+    //                       'red',
+    //                       'black',
+    //                       10,
+    //                       true);
 
     that.putString = function (string, x, y) {
         var fg = arguments.length > 3 ? arguments[3] : spec.defaultFg,
@@ -182,6 +191,55 @@ var GenCon = function (spec) {
 
     that.getHeight = function () {
         return spec.height;
+    };
+
+    // The getVisualWidth method returns the width of the console in pixels
+
+    that.getVisualWidth = function () {
+        return container.offsetWidth;
+    };
+
+    // The getVisualHeight method returns the height of the console in pixels
+
+    that.getVisualHeight = function () {
+        return container.offsetHeight;
+    };
+
+    // The getDisplayCoord method returns the x and y coordinates of the cell
+    // that is under the given pixel coordinates. It takes the following
+    // parameters.
+    //
+    // x:
+    //     The horizontal pixel coordinate to convert. For example, the x
+    //     position of the mouse cursor
+    //
+    // y:
+    //     The vertical pixel coordinate to convert. For example, the y position
+    //     of the mouse cursor
+    //
+    // - Example -
+    //     var display = GenCon({});
+    //     display.getDisplayCoord(32, 28);
+
+    that.getDisplayCoord = function (x, y) {
+        var element = container,
+            firstCell = document.getElementById('cell-0-0'),
+            characterWidth = firstCell.offsetWidth,
+            characterHeight = firstCell.offsetHeight;
+
+        // This little piece of code loops up through all the parent elements
+        // to find the absolute pixel coordinate of the display. Pulled from
+        // stack overflow. http://stackoverflow.com/questions/288699
+        for (var containerX = 0, containerY = 0;
+             element != null;
+             containerX += element.offsetLeft,
+             containerY += element.offsetTop,
+             element = element.offsetParent);
+
+        return {
+            x: Math.floor((x - containerX) / characterWidth),
+            y: Math.floor((y - containerY) / characterHeight)
+        };
     };
 
     return that;
