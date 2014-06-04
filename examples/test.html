@@ -11,8 +11,7 @@
                     .putString(' ).( ', 0, 1, 'red', 'black')
                     .putString('( V )', 0, 2, 'red', 'black')
                     .putString(' \\|/ ', 0, 3, 'red', 'black')
-                    .putString('Click on the screen to see a message in your ' +
-                               'browser\'s javascript console!',
+                    .putString('Click on a cell to set it\'s background blue!',
                                25,
                                0,
                                'yellow',
@@ -26,8 +25,9 @@
                 cons.putString('But this text does, and is not formatted using the formatting argument of putString. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 25, 12, 'red', 'black', 20);
                 document.onmousedown = function (e) {
                     var coord = cons.getDisplayCoord(e.clientX, e.clientY);
-                    console.log('Your mouse is clicked on the cell (' + 
-                                coord.x + ', ' + coord.y + ')');
+                    cons.set(coord.x, coord.y, {
+                        bg: 'blue',
+                    });
                 };
             };
         </script>

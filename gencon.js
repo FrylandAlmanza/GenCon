@@ -103,6 +103,46 @@ var GenCon = function (spec) {
         return this;
     };
 
+    // The set method allows you to set any values of a cell, without altering
+    // the values you don't provide. It takes the following parameters
+    //
+    // x:
+    //     The horizontal position of the cell
+    //
+    // y:
+    //     The vertical position of the cell
+    //
+    // settings:
+    //     A javascript object that has the properties you'd like to modify.
+    //     Any properties not provided will be left as they already are. The
+    //     following properties may be used.
+    //
+    //     character:
+    //         The character to put in the cell
+    //
+    //     fg:
+    //         The css forground of the cell
+    //
+    //     bg:
+    //         The css background of the cell
+    //
+    // - Example -
+    //    var display = GenCon({});
+    //    display.putChar('a', 3, 2, 'green', 'yellow');
+    //    display.set(3, 2, {
+    //        bg: 'blue'
+    //    });
+
+    that.set = function (x, y, settings) {
+        var span = document.getElementById('cell-' + x + '-' + y);
+        span.style.background = settings.bg || span.style.background;
+        span.style.color = settings.fg || span.style.color;
+        if (settings.character) {
+            settings.character = character === ' ' ? '\u00a0' : character;
+        }
+        return this;
+    };
+
     // The putString method draws a sequence of characters to the display. It
     // takes the following parameters.
     //
