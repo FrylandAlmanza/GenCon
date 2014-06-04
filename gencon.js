@@ -93,7 +93,7 @@ var GenCon = function (spec) {
     //     display.putChar('@', 2, 5);
     //     display.putChar('D', 3, 5, 'red'); 
 
-    that.putChar = function (character, x, y) {
+    that.putChar = function (x, y, character) {
         var fg = arguments.length > 3 ? arguments[3] : spec.defaultFg,
             bg = arguments.length > 4 ? arguments[4] : spec.defaultBg;
         var span = document.getElementById('cell-' + x + '-' + y);
@@ -186,7 +186,7 @@ var GenCon = function (spec) {
     //                       10,
     //                       true);
 
-    that.putString = function (string, x, y) {
+    that.putString = function (x, y, string) {
         var fg = arguments.length > 3 ? arguments[3] : spec.defaultFg,
             bg = arguments.length > 4 ? arguments[4] : spec.defaultBg,
             maxWidth = arguments.length > 5 ? arguments[5] : 0,
@@ -200,11 +200,11 @@ var GenCon = function (spec) {
                     y++;
                 }
                 if (i > 0 && xOffset !== 0) {
-                    this.putChar(' ', x + xOffset, y, fg, bg);
+                    this.putChar(x + xOffset, y, ' ', fg, bg);
                     xOffset++;
                 }
                 for (var j = 0; j < words[i].length; j++) {
-                    this.putChar(words[i].charAt(j), x + xOffset, y, fg, bg);
+                    this.putChar(x + xOffset, y, words[i].charAt(j), fg, bg);
                     xOffset++;
                 }
             }
@@ -214,7 +214,7 @@ var GenCon = function (spec) {
                     xOffset = 0;
                     y++;
                 }
-                this.putChar(string.charAt(i), x + xOffset, y, fg, bg);
+                this.putChar(x + xOffset, y, string.charAt(i), fg, bg);
                 xOffset++;
             }
         }

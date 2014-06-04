@@ -7,22 +7,22 @@
             window.onload = function () {
                 cons = GenCon({width: 80, height: 24})
                     .addTo('displayplace');
-                cons.putString('(.Y.)', 0, 0, 'red', 'black')
-                    .putString(' ).( ', 0, 1, 'red', 'black')
-                    .putString('( V )', 0, 2, 'red', 'black')
-                    .putString(' \\|/ ', 0, 3, 'red', 'black')
-                    .putString('Click on a cell to set it\'s background blue!',
-                               25,
+                cons.putString(0, 0, '(.Y.)', 'red', 'black')
+                    .putString(0, 1, ' ).( ', 'red', 'black')
+                    .putString(0, 2, '( V )', 'red', 'black')
+                    .putString(0, 3, ' \\|/ ', 'red', 'black')
+                    .putString(25,
                                0,
+                               'Click on a cell to set it\'s background blue!',
                                'yellow',
                                'black',
                                20,
                                true)
-                    .putChar('O', 8, 2)
-                    .putChar('W', 10, 3, 'yellow');
-                cons.putString('This text does not have a width cap', 0, 10);
-                cons.putString('But this text does. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 0, 12, 'red', 'black', 20, true);
-                cons.putString('But this text does, and is not formatted using the formatting argument of putString. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 25, 12, 'red', 'black', 20);
+                    .putChar(8, 2, 'O')
+                    .putChar(10, 3, 'W', 'yellow');
+                cons.putString(0, 10, 'This text does not have a width cap');
+                cons.putString(0, 12, 'But this text does. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 'red', 'black', 20, true);
+                cons.putString(25, 12, 'But this text does, and is not formatted using the formatting argument of putString. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet. Lorem ipsum delor sit amet.', 'red', 'black', 20);
                 document.onmousedown = function (e) {
                     var coord = cons.getDisplayCoord(e.clientX, e.clientY);
                     cons.set(coord.x, coord.y, {
