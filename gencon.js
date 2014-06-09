@@ -138,8 +138,10 @@ var GenCon = function (spec) {
         span.style.background = settings.bg || span.style.background;
         span.style.color = settings.fg || span.style.color;
         if (settings.character) {
-            settings.character = character === ' ' ? '\u00a0' : character;
+            settings.character = settings.character === ' ' ? '\u00a0' :
+                                 settings.character;
         }
+        span.childNodes[0].nodeValue = settings.character;
         return this;
     };
 
