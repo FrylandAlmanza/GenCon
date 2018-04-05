@@ -40,14 +40,26 @@ var GenCon = function (spec) {
             for (var x = 0; x < spec.width; x++) {
                 span = document.createElement('span');
                 span.id = 'cell-' + x + '-' + y;
+                span.className = 'gcell';
                 span.appendChild(document.createTextNode('\u00a0'));
                 span.style.background = spec.defaultBg;
                 span.style.color = spec.defaultFg;
+                span.onclick = (function () {
+                    var i = x;
+                    var j = y;
+                    return (function () {
+                        that.clickCallback(i, j);
+                    });
+                })();
                 container.appendChild(span);
             }
             container.appendChild(document.createElement('br'));
         }
     })();
+
+    that.clickCallback = function(x, y) {
+        console.log("x: " + x + ", y: " + y);
+    };
 
     // The addTo method adds the display to a DOM element. It takes the
     // following parameter
@@ -135,13 +147,13 @@ var GenCon = function (spec) {
 
     that.set = function (x, y, settings) {
         var span = document.getElementById('cell-' + x + '-' + y);
-        span.style.background = settings.bg || span.style.background;
-        span.style.color = settings.fg || span.style.color;
+        span.style.background = settings.bg ? settings.bg : span.style.background;
+        span.style.color = settings.fg ? settings.fg : span.style.color;
         if (settings.character) {
             settings.character = settings.character === ' ' ? '\u00a0' :
                                  settings.character;
+            span.childNodes[0].nodeValue = settings.character;
         }
-        span.childNodes[0].nodeValue = settings.character;
         return this;
     };
 
